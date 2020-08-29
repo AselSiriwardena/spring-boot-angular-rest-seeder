@@ -17,7 +17,7 @@ export class APPService {
         const body = JSON.stringify({username: model.username, password: model.password , first_name: model.first_name});
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         const options = { headers };
-        return this.httpClient.post('http://localhost:8000/newUser', body, options)
+        return this.httpClient.post('http://localhost:8080/newUser', body, options)
             .map(response => {
                     const data: any = response;
                     return data;
@@ -27,9 +27,7 @@ export class APPService {
 
     getAllUsers(): any {
       const body = JSON.stringify('');
-      const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-      const options = { headers };
-      return this.httpClient.post('http://localhost:8000/users', body, options)
+      return this.httpClient.post('http://localhost:8080/users', body, {responseType: 'text'})
         .map(response => {
             const data: any = response;
             return data;
@@ -37,16 +35,16 @@ export class APPService {
         );
     }
 
-    // getBuyUsername(model: any): any {
-    //     const body = JSON.stringify({ username: model.username });
-    //     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    //     const options = { headers };
-    //     return this.httpClient.post('http://localhost:8000/getUser', body, options)
-    //         .map(response => {
-    //                 const data: any = response;
-    //                 return data;
-    //             }
-    //         );
-    // }
+    getBuyUsername(model: any): any {
+        const body = JSON.stringify({ id: model.username });
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const options = { headers };
+        return this.httpClient.post('http://localhost:8080/getUser', body, options)
+            .map(response => {
+                    const data: any = response;
+                    return data;
+                }
+            );
+    }
 
 }

@@ -13,19 +13,12 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 @RestController
 public class BookController {
 
     @Autowired
     UserRepository userRepository;
-
-    // Get All
-    @PostMapping("/users")
-    public List<User> getAllNotes() {
-        System.out.println("req");
-        return userRepository.findAll();
-    }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST, produces = "application/json")
     public void findUsers(HttpServletResponse response) throws IOException {
@@ -35,14 +28,14 @@ public class BookController {
     }
 
     // Get a Single User
-    @GetMapping("/books/{id}")
-    public User getNoteById(@PathVariable(value = "id") int userId) throws UserNotFoundException {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+    @RequestMapping(value = "/getUser", method = RequestMethod.POST, produces = "application/json")
+    public User getNoteById(@RequestBody User user) throws UserNotFoundException {
+        return userRepository.findById(user.getId())
+                .orElseThrow(() -> new UserNotFoundException(user.getId()));
     }
 
-    // Update a Note
-    @PutMapping("/books/{id}")
+    // Update a User
+    @RequestMapping(value = "/updateUser", method = RequestMethod.POST, produces = "application/json")
     public User updateNote(@PathVariable(value = "id") int id,
                            @Valid @RequestBody User userDetails) throws UserNotFoundException {
 
@@ -53,19 +46,15 @@ public class BookController {
         user.setName(user.getName());
         user.setPassword(user.getPassword());
 
-        User updatedUser = userRepository.save(user);
-
-        return updatedUser;
+        return userRepository.save(user);
     }
 
-    // Delete a Note
-    @DeleteMapping("/books/{id}")
+    // Delete a User
+    @RequestMapping(value = "/deleteUser", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<?> deleteBook(@PathVariable(value = "id") int id) throws UserNotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
-
         userRepository.delete(user);
-
         return ResponseEntity.ok().build();
     }
 }

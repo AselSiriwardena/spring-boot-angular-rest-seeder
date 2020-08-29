@@ -30,15 +30,14 @@ export class AppComponent {
             this.modelGet.allUsers = JSON.stringify(data);
           }
       );
+    } else {
+      this.appService.getBuyUsername(this.modelGet).subscribe(
+          (data: any) => {
+            console.log(data);
+            this.modelGet.allUsers = JSON.stringify(data);
+          }
+      );
     }
-    // else {
-    //   this.appService.getBuyUsername(this.modelGet).subscribe(
-    //       (data: any) => {
-    //         console.log(data);
-    //         this.modelGet.allUsers = JSON.stringify(data);
-    //       }
-    //   );
-    // }
 
   }
 }
