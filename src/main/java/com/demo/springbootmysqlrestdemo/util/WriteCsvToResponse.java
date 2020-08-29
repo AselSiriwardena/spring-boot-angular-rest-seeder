@@ -1,6 +1,6 @@
 package com.demo.springbootmysqlrestdemo.util;
 
-import com.demo.springbootmysqlrestdemo.models.Book;
+import com.demo.springbootmysqlrestdemo.models.User;
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.StatefulBeanToCsv;
@@ -16,19 +16,19 @@ public class WriteCsvToResponse {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WriteCsvToResponse.class);
 
-    public static void writeCities(PrintWriter writer, List<Book> cities) {
+    public static void writeUsers(PrintWriter writer, List<User> cities) {
 
         try {
 
-            ColumnPositionMappingStrategy<Book> mapStrategy
+            ColumnPositionMappingStrategy<User> mapStrategy
                     = new ColumnPositionMappingStrategy<>();
 
-            mapStrategy.setType(Book.class);
+            mapStrategy.setType(User.class);
 
-            String[] columns = new String[]{"id", "book_name", "isbn"};
+            String[] columns = new String[]{"id", "name", "password"};
             mapStrategy.setColumnMapping(columns);
 
-            StatefulBeanToCsv<Book> btcsv = new StatefulBeanToCsvBuilder<Book>(writer)
+            StatefulBeanToCsv<User> btcsv = new StatefulBeanToCsvBuilder<User>(writer)
                     .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
                     .withMappingStrategy(mapStrategy)
                     .withSeparator(',')
@@ -42,19 +42,19 @@ public class WriteCsvToResponse {
         }
     }
 
-    public static void writeCity(PrintWriter writer, Book city) {
+    public static void writeUser(PrintWriter writer, User city) {
 
         try {
 
-            ColumnPositionMappingStrategy<Book> mapStrategy
+            ColumnPositionMappingStrategy<User> mapStrategy
                     = new ColumnPositionMappingStrategy<>();
 
-            mapStrategy.setType(Book.class);
+            mapStrategy.setType(User.class);
 
-            String[] columns = new String[]{"id", "book_name", "isbn"};
+            String[] columns = new String[]{"id", "name", "password"};
             mapStrategy.setColumnMapping(columns);
 
-            StatefulBeanToCsv<Book> btcsv = new StatefulBeanToCsvBuilder<Book>(writer)
+            StatefulBeanToCsv<User> btcsv = new StatefulBeanToCsvBuilder<User>(writer)
                     .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
                     .withMappingStrategy(mapStrategy)
                     .withSeparator(',')

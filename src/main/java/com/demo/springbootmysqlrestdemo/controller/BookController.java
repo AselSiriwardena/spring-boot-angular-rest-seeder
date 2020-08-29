@@ -1,8 +1,8 @@
 package com.demo.springbootmysqlrestdemo.controller;
 
-import com.demo.springbootmysqlrestdemo.exception.BookNotFoundException;
-import com.demo.springbootmysqlrestdemo.models.Book;
-import com.demo.springbootmysqlrestdemo.repository.BookRepository;
+import com.demo.springbootmysqlrestdemo.exception.UserNotFoundException;
+import com.demo.springbootmysqlrestdemo.models.User;
+import com.demo.springbootmysqlrestdemo.repository.UserRepository;
 import com.demo.springbootmysqlrestdemo.util.WriteCsvToResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,56 +13,58 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class BookController {
 
     @Autowired
-    BookRepository bookRepository;
+    UserRepository userRepository;
 
-    // Get All Notes
-    @PostMapping("/books")
-    public List<Book> getAllNotes() {
-        return bookRepository.findAll();
+    // Get All
+    @PostMapping("/users")
+    public List<User> getAllNotes() {
+        System.out.println("req");
+        return userRepository.findAll();
     }
 
-    @RequestMapping(value = "/books-csv", produces = "text/csv")
-    public void findCities(HttpServletResponse response) throws IOException {
-
-        List<Book> cities = bookRepository.findAll();
-
-        WriteCsvToResponse.writeCities(response.getWriter(), cities);
+    @RequestMapping(value = "/users", method = RequestMethod.POST, produces = "application/json")
+    public void findUsers(HttpServletResponse response) throws IOException {
+        List<User> users = userRepository.findAll();
+        WriteCsvToResponse.writeUsers(response.getWriter(), users);
+        System.out.println(users);
     }
 
-    // Get a Single Note
+    // Get a Single User
     @GetMapping("/books/{id}")
-    public Book getNoteById(@PathVariable(value = "id") Long bookId) throws BookNotFoundException {
-        return bookRepository.findById(bookId)
-                .orElseThrow(() -> new BookNotFoundException(bookId));
+    public User getNoteById(@PathVariable(value = "id") int userId) throws UserNotFoundException {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
     }
 
     // Update a Note
     @PutMapping("/books/{id}")
-    public Book updateNote(@PathVariable(value = "id") Long bookId,
-                           @Valid @RequestBody Book bookDetails) throws BookNotFoundException {
+    public User updateNote(@PathVariable(value = "id") int id,
+                           @Valid @RequestBody User userDetails) throws UserNotFoundException {
 
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new BookNotFoundException(bookId));
+        User user= userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
 
-        book.setBook_name(bookDetails.getBook_name());
-        book.setIsbn(bookDetails.getIsbn());
+        user.setId(userDetails.getId());
+        user.setName(user.getName());
+        user.setPassword(user.getPassword());
 
-        Book updatedBook = bookRepository.save(book);
+        User updatedUser = userRepository.save(user);
 
-        return updatedBook;
+        return updatedUser;
     }
 
     // Delete a Note
     @DeleteMapping("/books/{id}")
-    public ResponseEntity<?> deleteBook(@PathVariable(value = "id") Long bookId) throws BookNotFoundException {
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new BookNotFoundException(bookId));
+    public ResponseEntity<?> deleteBook(@PathVariable(value = "id") int id) throws UserNotFoundException {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
 
-        bookRepository.delete(book);
+        userRepository.delete(user);
 
         return ResponseEntity.ok().build();
     }
