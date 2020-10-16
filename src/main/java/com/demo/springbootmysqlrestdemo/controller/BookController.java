@@ -57,4 +57,11 @@ public class BookController {
         userRepository.delete(user);
         return ResponseEntity.ok().build();
     }
+
+    // Delete all User
+    @RequestMapping(value = "/deleteUsers", method = RequestMethod.POST, produces = "application/json")
+    public ResponseEntity<?> deleteUsers() {
+        userRepository.	deleteAllInBatch();
+        return ResponseEntity.ok().build();
+    }
 }
